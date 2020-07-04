@@ -1,7 +1,6 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 const PATHS = {
     assetsDirName: "assets",
@@ -17,7 +16,8 @@ module.exports = {
     },
     context: PATHS.src,
     entry: {
-        app: ["@babel/polyfill", "./index.js"],
+        app: ["./index.js"],
+        //app: ["@babel/polyfill", "./index.js"],
     },
     output: {
         path: PATHS.dist,
@@ -36,16 +36,11 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new HTMLWebpackPlugin({
-            hash: false,
-            template: `${PATHS.srcAssets}/index.html`,
-            filename: "./index.html",
-        }),
         new CopyWebpackPlugin({
             patterns: [{ from: `${PATHS.srcAssets}/static`, to: "" }],
         }),
     ],
-    module: {
+     module: {
         rules: [
             {
                 test: /\.js$/,
@@ -63,5 +58,5 @@ module.exports = {
                 use: ["html-loader"],
             },
         ],
-    },
+    }, 
 };

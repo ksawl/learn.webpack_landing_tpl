@@ -1,4 +1,5 @@
 const baseWabpackConfig = require("./webpack.base.conf");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCssAssetsWebpackPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
@@ -6,7 +7,11 @@ const TerserWebpackPlugin = require("terser-webpack-plugin");
 const PATHS = baseWabpackConfig.externals.paths;
 const isDev = true;
 const isProd = !isDev;
-const filename = (ext) => `${PATHS.assetsDirName}/${ext}/[name].[hash].${ext}`;
+const filename = (ext = "") => {
+    return ext.length > 0
+        ? `${PATHS.assetsDirName}/${ext}/[name].[hash].${ext}`
+        : "[path][name].[hash].[ext]";
+};
 const fileid = (ext) => `${PATHS.assetsDirName}/${ext}/[id].[hash].${ext}`;
 
 module.exports = {
@@ -32,6 +37,14 @@ module.exports = {
         ],
     },
     plugins: [
+        new HTMLWebpackPlugin({
+            hash: false,
+            template: `${PATHS.srcAssets}/index.html`,
+            filename: "./index.html",
+            minify: {
+                collapseWhitespace: isProd,
+            },
+        }),
         new MiniCssExtractPlugin({
             filename: filename("css"),
             chunkFilename: fileid("css"),
@@ -40,12 +53,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.s[ac]ss$/,
+                test: /\.css$/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            publicPath: "../",
+                            publicPath: "../../",
                             hmr: isDev,
                             reloadAll: true,
                         },
@@ -53,6 +66,32 @@ module.exports = {
                     { loader: "css-loader", options: { sourceMap: isDev } },
                     {
                         loader: "postcss-loader",
+                        options: {
+                            sourceMap: isDev,
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.s[ac]ss$/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: "../../",
+                            hmr: isDev,
+                            reloadAll: true,
+                        },
+                    },
+                    { loader: "css-loader", options: { sourceMap: isDev } },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            sourceMap: isDev,
+                        },
+                    },
+                    {
+                        loader: "resolve-url-loader",
                         options: {
                             sourceMap: isDev,
                         },
@@ -73,9 +112,7 @@ module.exports = {
                     {
                         loader: "file-loader",
                         options: {
-                            name: "[name].[hash].[ext]",
-                            outputPath: `${PATHS.assetsDirName}/img`,
-                            useRelativePath: true,
+                            name: filename(),
                         },
                     },
                     {
@@ -104,6 +141,14 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.(woff2?|ttf|otf|eot)$/,
+                exclude: /node_modules/,
+                loader: "file-loader",
+                options: {
+                    name: filename(),
+                },
             },
         ],
     },

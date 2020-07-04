@@ -1,5 +1,6 @@
 const baseWabpackConfig = require("./webpack.base.conf");
 const webpack = require("webpack");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const PATHS = baseWabpackConfig.externals.paths;
@@ -20,7 +21,7 @@ module.exports = {
     devtool: "#cheap-module-eval-source-map",
     devServer: {
         port: 8081,
-        hot: true,
+        //hot: true,
         contentBase: PATHS.dist,
         overlay: {
             warnings: false,
@@ -28,6 +29,11 @@ module.exports = {
         },
     },
     plugins: [
+        new HTMLWebpackPlugin({
+            hash: false,
+            template: `${PATHS.srcAssets}/index.html`,
+            filename: "./index.html",
+        }),
         new MiniCssExtractPlugin({
             filename: filename("css"),
             chunkFilename: fileid("css"),
@@ -36,9 +42,9 @@ module.exports = {
             filename: "[file].map",
         }),
     ],
-    module: {
+     module: {
         rules: [
-            {
+           {
                 test: /\.css$/,
                 use: [
                     {
@@ -100,7 +106,7 @@ module.exports = {
                 },
             },
             {
-                test: /\.(woff2?|ttf|otf|eot|svg)$/,
+                test: /\.(woff2?|ttf|otf|eot)$/,
                 exclude: /node_modules/,
                 loader: "file-loader",
                 options: {
