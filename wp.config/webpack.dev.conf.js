@@ -73,6 +73,12 @@ module.exports = {
                         },
                     },
                     {
+                        loader: "resolve-url-loader",
+                        options: {
+                            sourceMap: isDev,
+                        },
+                    },
+                    {
                         loader: "sass-loader",
                         options: {
                             // Prefer `dart-sass`
