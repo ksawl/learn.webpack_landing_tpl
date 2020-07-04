@@ -1,0 +1,4 @@
+@font-face{font-family:RalewayBold;src:url(../../assets/fonts/RalewayBold.ttf) format("truetype")}body{font-family:RalewayBold,sans-serif}
+@font-face{font-family:Proxima;src:url(/assets/fonts/ProximaNova-Reg.ttf) format("truetype")}.wrapper{background:#000 url(../../assets/img/bg_adminlogin.jpg) 50% no-repeat}h1{font-family:Proxima}h1,h2,h3{color:red}h3{font-family:serif;transition:5s;transform:translateY(20%);background:linear-gradient(#ccc,#ddd)}
+
+/*# sourceMappingURL=app.css.map*/

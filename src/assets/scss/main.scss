@@ -1,0 +1,24 @@
+@import 'utils/libs.scss';
+@import 'utils/vars.scss';
+@import 'utils/mixins.scss';
+@import 'utils/fonts.scss';
+
+.wrapper {
+    background: #000 url('../img/bg_adminlogin.jpg') center no-repeat;
+}
+h1 {
+    font-family: 'Proxima';
+    color: $color-red;
+}
+
+h2 {
+    color: $color-red;
+}
+
+h3 {
+    color: $color-red;
+    font-family: serif;
+    transition: 5s;
+    transform: translate(0, 20%);
+    background: linear-gradient(#ccc, #ddd);
+}
