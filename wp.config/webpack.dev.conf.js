@@ -5,7 +5,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PATHS = baseWabpackConfig.externals.paths;
 const isDev = true;
 const isProd = !isDev;
-const filename = (ext) => `${PATHS.assetsDirName}/${ext}/[name].${ext}`;
+const filename = (ext = "") => {
+    return ext.length > 0
+        ? `${PATHS.assetsDirName}/${ext}/[name].${ext}`
+        : "[path][name].[ext]";
+};
 const fileid = (ext) => `${PATHS.assetsDirName}/${ext}/[id].${ext}`;
 
 module.exports = {
@@ -92,9 +96,7 @@ module.exports = {
                 test: /\.(gif|png|jpe?g|svg)$/i,
                 loader: "file-loader",
                 options: {
-                    name: `[name].[ext]`,
-                    outputPath: `${PATHS.assetsDirName}/img`,
-                    useRelativePath: true,
+                    name: filename(),
                 },
             },
             {
@@ -102,23 +104,9 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: "file-loader",
                 options: {
-                    name: "[path][name].[ext]",
-                    //outputPath: `${PATHS.assetsDirName}/fonts`,
+                    name: filename(),
                 },
             },
-            /* {
-                test: /\.(ttf|eot|woff2)$/i,
-                use: [
-                    {
-                        loader: "file-loader",
-                        options: {
-                            name: "[name].[ext]",
-                            outputPath: `${PATHS.assetsDirName}/fonts`,
-                            useRelativePath: true,
-                        },
-                    },
-                ],
-            }, */
         ],
     },
 };
