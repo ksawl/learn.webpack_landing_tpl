@@ -13,6 +13,45 @@ const filename = (ext = "") => {
 };
 const fileid = (ext) => `${PATHS.assetsDirName}/${ext}/[id].${ext}`;
 
+const cssLoader = (extra) => {
+    const ret = [
+        {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+                publicPath: "../../",
+                hmr: isDev,
+                reloadAll: true,
+            },
+        },
+        { loader: "css-loader", options: { sourceMap: isDev } },
+        {
+            loader: "postcss-loader",
+            options: {
+                ident: "postcss",
+                plugins: [
+                    require("cssnano")({
+                        preset: [
+                            "default",
+                            {
+                                discardComments: {
+                                    removeAll: true,
+                                },
+                            },
+                        ],
+                    }),
+                ],
+                sourceMap: isDev,
+            },
+        },
+    ];
+
+    if (extra) {
+        Array.prototype.push.apply(ret, extra);
+    }
+
+    return ret;
+};
+
 module.exports = {
     mode: "development",
     output: {
@@ -21,7 +60,6 @@ module.exports = {
     devtool: "#cheap-module-eval-source-map",
     devServer: {
         port: 8081,
-        //hot: true,
         contentBase: PATHS.dist,
         overlay: {
             warnings: false,
@@ -42,46 +80,15 @@ module.exports = {
             filename: "[file].map",
         }),
     ],
-     module: {
+    module: {
         rules: [
-           {
+            {
                 test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: "../../",
-                            hmr: isDev,
-                            reloadAll: true,
-                        },
-                    },
-                    { loader: "css-loader", options: { sourceMap: isDev } },
-                    {
-                        loader: "postcss-loader",
-                        options: {
-                            sourceMap: isDev,
-                        },
-                    },
-                ],
+                use: cssLoader(),
             },
             {
                 test: /\.s[ac]ss$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: "../../",
-                            hmr: isDev,
-                            reloadAll: true,
-                        },
-                    },
-                    { loader: "css-loader", options: { sourceMap: isDev } },
-                    {
-                        loader: "postcss-loader",
-                        options: {
-                            sourceMap: isDev,
-                        },
-                    },
+                use: cssLoader([
                     {
                         loader: "resolve-url-loader",
                         options: {
@@ -96,7 +103,7 @@ module.exports = {
                             sourceMap: isDev,
                         },
                     },
-                ],
+                ]),
             },
             {
                 test: /\.(gif|png|jpe?g|svg)$/i,

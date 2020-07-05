@@ -47,5 +47,9 @@
         "@babel/polyfill": "^7.10.1",
         "bootstrap": "^4.5.0"
     },
-    "browserslist": "> 0.25%, not dead"
+    "browserslist": [
+        "> 1%",
+        "last 5 version",
+        "IE 10"
+    ]
 }

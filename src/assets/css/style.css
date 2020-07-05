@@ -1,8 +1,12 @@
 @font-face {
-    font-family: 'RalewayBold';
-    src: url('../fonts/RalewayBold.ttf') format('truetype');
+    font-family: "RalewayBold";
+    src: url("../fonts/RalewayBold.ttf") format("truetype");
 }
 
 body {
-    font-family: 'RalewayBold', sans-serif;
+    font-family: "RalewayBold", sans-serif;
+}
+img {
+    transform: translate(50%, 59%);
+    background: linear-gradient(black, white);
 }

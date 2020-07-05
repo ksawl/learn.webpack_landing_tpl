@@ -14,6 +14,46 @@ const filename = (ext = "") => {
 };
 const fileid = (ext) => `${PATHS.assetsDirName}/${ext}/[id].[hash].${ext}`;
 
+const cssLoader = (extra) => {
+    const ret = [
+        {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+                publicPath: "../../",
+                hmr: isDev,
+                reloadAll: true,
+            },
+        },
+        { loader: "css-loader", options: { sourceMap: isDev } },
+        {
+            loader: "postcss-loader",
+            options: {
+                ident: "postcss",
+                plugins: [
+                    require("autoprefixer"),
+                    require("css-mqpacker"),
+                    require("cssnano")({
+                        preset: [
+                            "default",
+                            {
+                                discardComments: {
+                                    removeAll: true,
+                                },
+                            },
+                        ],
+                    }),
+                ],
+            },
+        },
+    ];
+
+    if (extra) {
+        Array.prototype.push.apply(ret, extra);
+    }
+
+    return ret;
+};
+
 module.exports = {
     mode: "production",
     output: {
@@ -54,42 +94,11 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: "../../",
-                            hmr: isDev,
-                            reloadAll: true,
-                        },
-                    },
-                    { loader: "css-loader", options: { sourceMap: isDev } },
-                    {
-                        loader: "postcss-loader",
-                        options: {
-                            sourceMap: isDev,
-                        },
-                    },
-                ],
+                use: cssLoader(),
             },
             {
                 test: /\.s[ac]ss$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: "../../",
-                            hmr: isDev,
-                            reloadAll: true,
-                        },
-                    },
-                    { loader: "css-loader", options: { sourceMap: isDev } },
-                    {
-                        loader: "postcss-loader",
-                        options: {
-                            sourceMap: isDev,
-                        },
-                    },
+                use: cssLoader([
                     {
                         loader: "resolve-url-loader",
                         options: {
@@ -104,7 +113,7 @@ module.exports = {
                             sourceMap: isDev,
                         },
                     },
-                ],
+                ]),
             },
             {
                 test: /\.(gif|png|jpe?g|svg)$/i,

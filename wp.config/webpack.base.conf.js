@@ -8,6 +8,7 @@ const PATHS = {
     src: path.join(__dirname, "../src"),
     srcAssets: path.join(__dirname, "../src/assets"),
     dist: path.join(__dirname, "../dist"),
+    config: __dirname,
 };
 
 module.exports = {
@@ -16,8 +17,7 @@ module.exports = {
     },
     context: PATHS.src,
     entry: {
-        app: ["./index.js"],
-        //app: ["@babel/polyfill", "./index.js"],
+        app: ["@babel/polyfill", "./index.js"],
     },
     output: {
         path: PATHS.dist,
@@ -40,7 +40,7 @@ module.exports = {
             patterns: [{ from: `${PATHS.srcAssets}/static`, to: "" }],
         }),
     ],
-     module: {
+    module: {
         rules: [
             {
                 test: /\.js$/,
@@ -58,5 +58,5 @@ module.exports = {
                 use: ["html-loader"],
             },
         ],
-    }, 
+    },
 };
