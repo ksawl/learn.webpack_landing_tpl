@@ -1,5 +1,5 @@
 {
-    "name": "learn.webpack_landing_tpl",
+    "name": "tpl.webpack_landing",
     "version": "1.0.0",
     "description": "Template webpack for landing page",
     "main": "index.js",
